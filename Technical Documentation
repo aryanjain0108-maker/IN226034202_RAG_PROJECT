@@ -1,0 +1,70 @@
+1. Introduction
+What is RAG
+
+Retrieval-Augmented Generation combines:
+
+Information retrieval
+Text generation
+Why Needed
+Reduces hallucination
+Improves factual accuracy
+2. System Architecture Explanation
+
+Explain:
+
+Data ingestion
+Retrieval pipeline
+Answer generation
+Graph control
+3. Design Decisions
+Chunk Size
+Trade-off:
+Small → precise
+Large → more context
+Embedding Strategy
+Semantic similarity
+Retrieval
+Top-k nearest neighbors
+Prompt Design
+Include:
+Context
+Instructions
+Query
+4. Workflow Explanation
+
+LangGraph manages:
+
+Node execution
+State transitions
+Conditional routing
+5. Conditional Logic
+Intent detection (simple rules or classifier)
+Confidence threshold
+6. HITL Implementation
+Role
+Handles edge cases
+Benefits
+Improves reliability
+Limitations
+Slower response
+Requires human resource
+7. Challenges & Trade-offs
+Retrieval vs Speed
+More chunks → slower
+Chunk Size vs Quality
+Balance needed
+Cost vs Performance
+LLM usage cost
+8. Testing Strategy
+Tests
+Unit testing modules
+Query validation
+Sample Queries
+FAQ-type
+Complex queries
+Unknown queries
+9. Future Enhancements
+Multi-PDF support
+Feedback learning loop
+Memory (conversation history)
+Web deployment
