@@ -1,0 +1,91 @@
+LOW-LEVEL DESIGN (LLD)
+1. Module-Level Design
+Document Processing Module
+Input: PDF
+Output: Raw text
+Chunking Module
+Input: Text
+Output: List of chunks
+Embedding Module
+Input: Chunks
+Output: Vectors
+Vector Storage Module
+Stores vectors in ChromaDB
+Retrieval Module
+Returns top-k relevant chunks
+Query Processing Module
+Preprocesses user query
+Graph Execution Module
+Runs LangGraph nodes
+HITL Module
+Handles escalation logic
+2. Data Structures
+Document
+{
+  id: string,
+  content: text
+}
+Chunk
+{
+  chunk_id: string,
+  text: string,
+  embedding: vector
+}
+Query-Response
+{
+  query: string,
+  retrieved_chunks: list,
+  answer: string,
+  confidence: float
+}
+Graph State
+{
+  query: string,
+  context: list,
+  answer: string,
+  confidence: float,
+  escalate: boolean
+}
+3. Workflow Design (LangGraph)
+Nodes
+Input Node
+Processing Node
+Output Node
+Flow
+
+Input → Processing → Output
+
+4. Conditional Routing Logic
+Answer if:
+Confidence score > threshold
+Relevant chunks found
+Escalate if:
+Low similarity score
+No context found
+Complex query
+5. HITL Design
+Trigger
+Low confidence
+Missing data
+Process
+Query sent to human
+Human responds
+Response returned to user
+Optionally stored for learning
+6. API Design
+Input
+POST /query
+{
+  "query": "What is refund policy?"
+}
+Output
+{
+  "answer": "...",
+  "source": "...",
+  "confidence": 0.87,
+  "escalated": false
+}
+7. Error Handling
+No chunks → fallback message
+LLM failure → retry
+DB failure → alert
