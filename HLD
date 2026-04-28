@@ -1,0 +1,120 @@
+HIGH-LEVEL DESIGN (HLD)
+1. System Overview
+Problem Definition
+
+Customer support teams handle repetitive queries from users based on internal documentation (FAQs, manuals, policies). Manual handling leads to:
+
+High response time
+Increased operational cost
+Inconsistent answers
+Solution
+
+A RAG-based Customer Support Assistant that:
+
+Reads PDF knowledge base
+Retrieves relevant information
+Generates contextual answers
+Escalates complex queries to humans
+Scope
+
+✔ Single PDF knowledge base (extendable)
+✔ Text-based queries
+✔ CLI/Web interface
+✔ HITL escalation
+
+2. Architecture Diagram (Textual Representation)
+User → UI (CLI/Web)
+      ↓
+Query Processor
+      ↓
+LangGraph Workflow Engine
+      ↓
+ ┌───────────────┬────────────────┐
+ │ Retrieval Path│ Escalation Path│
+ └──────┬────────┴────────┬───────┘
+        ↓                 ↓
+Vector DB (ChromaDB)   Human Agent (HITL)
+        ↓                 ↓
+Embedding Model         Response Input
+        ↓                 ↓
+LLM (Answer Generator)  Final Output
+        ↓
+Response Formatter
+        ↓
+User
+3. Component Description
+Document Loader
+
+Loads PDF using libraries (PyPDFLoader)
+
+Chunking Strategy
+
+Splits text into chunks (e.g., 500–1000 tokens)
+
+Embedding Model
+
+Converts chunks into vectors (e.g., OpenAI / sentence-transformers)
+
+Vector Store
+
+Stores embeddings → ChromaDB
+
+Retriever
+
+Fetches top-k relevant chunks
+
+LLM
+
+Generates final answer using retrieved context
+
+Graph Workflow Engine
+
+Controls execution flow using LangGraph
+
+Routing Layer
+
+Decides:
+
+Answer directly
+Escalate to human
+HITL Module
+
+Handles escalation & human response integration
+
+4. Data Flow
+Document Flow
+
+PDF → Loader → Chunking → Embedding → ChromaDB
+
+Query Flow
+
+User Query → Embedding → Similarity Search → Retrieve Chunks → LLM → Response
+
+With Routing
+
+Query → Graph →
+
+If confident → Answer
+Else → HITL
+5. Technology Choices
+Why ChromaDB
+Lightweight
+Easy integration
+Fast similarity search
+Why LangGraph
+Stateful workflows
+Conditional routing
+Graph-based execution (better than linear pipelines)
+LLM Choice
+GPT-based / open-source (e.g., LLaMA)
+Strong reasoning + contextual understanding
+6. Scalability Considerations
+Large Documents
+Efficient chunking
+Metadata indexing
+High Query Load
+Caching responses
+Parallel retrieval
+Latency
+Reduce chunk size
+Limit top-k retrieval
